@@ -6,6 +6,33 @@
 model. A survivor should be able to have someone technical read every line and verify the thing
 does exactly what it claims — and nothing else.
 
+---
+
+## Why this exists
+
+> **736 million women — about 1 in 3 worldwide — have experienced physical or sexual
+> violence.** Roughly **50,000 women and girls are killed by a partner or family member every
+> year — 137 a day, one every ten minutes.** 60% of murdered women are killed by someone who was
+> supposed to love them, against 11% of murdered men.
+
+And almost none of it is counted. **Under 40%** of women who experience violence seek any help;
+of those, **under 10%** go to the police. In England & Wales, fewer than **1 in 6** rape victims
+report, and about **2.7%** of recorded rapes are charged. Coercive control became a crime there
+in 2015; in one recent year there were **49,557 recorded offences and 853 convictions.**
+
+The abuse that never reaches a report is exactly the abuse a person has to **recognise for
+herself.** The tactics work because they are *unnamed* — formless wrongness routes back to
+*"something is wrong with me."* **Name the move and it loses its power.** That is the whole
+project: make the moveset nameable, silently, in her own head.
+
+> See it, sourced and dated: **[the Spini Sim](https://vsavytsk1.github.io/EldenGirl/spini-sim.html)** ·
+> learn the moveset: **[the Training Ground](https://vsavytsk1.github.io/EldenGirl/training-ground.html)** ·
+> the full site: **<https://vsavytsk1.github.io/EldenGirl/>**
+>
+> *Every figure above carries its source in [`grimoire/SPINI_SIM.md`](grimoire/SPINI_SIM.md)
+> (WHO 2018 · UNODC/UN Women 2024 · ONS · Home Office/CPS · Campbell 2003). A number with no
+> source does not ship.*
+
 > **A badly designed app in this space does not fail to help. It gets someone hurt.**
 > The threat model comes before the feature list. Read [`docs/THE_APP.md`](docs/THE_APP.md) before you write a line of code.
 

@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#050510">
+<meta name="robots" content="noindex">
+<title>THE SPINI SIM · the scale of it</title>
+<!--
+  THE SPINI SIM — the statistics build, rendered honestly.
+  Pure canvas + vanilla JS. No dependencies, no storage, no network, no analytics.
+  Writes ZERO bytes (G4). Solemn by design: no score, no streak, no reward on a
+  death toll. Motion is opt-in (Path VIII). Every number carries its source string
+  into the render and is tappable (the honest boundary — no number without a source).
+  Data source: grimoire/SPINI_SIM.md <- grimoire/monsterStats.md.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:#050510;color:#e6e6f0;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  height:100%;width:100%;overflow:hidden;overscroll-behavior:none;
+  -webkit-user-select:none;user-select:none}
+#bg{position:fixed;inset:0;z-index:1}
+.scr{position:fixed;inset:0;z-index:5;display:none;flex-direction:column;
+  padding:calc(env(safe-area-inset-top) + 14px) 16px calc(env(safe-area-inset-bottom) + 14px)}
+.scr.on{display:flex}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+h1{font-size:21px;color:#cc44ff;letter-spacing:.1em;text-transform:uppercase;font-weight:700;line-height:1.2}
+.sub{font-size:10px;color:rgba(204,68,255,.6);letter-spacing:.12em;text-transform:uppercase;margin-top:5px}
+p{font-size:12.5px;line-height:1.62;color:rgba(230,230,240,.72);margin:8px 0}
+p b{color:#ffd700}p .g{color:#7fff9f}p .r{color:#ff6a5c}
+button{font-family:inherit;cursor:pointer;border:none}
+.big{width:100%;background:#cc44ff;color:#050510;border-radius:7px;padding:14px;font-size:13px;
+  font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-top:10px}
+.big:active{transform:scale(.99)}
+.ghost{width:100%;background:transparent;color:#8a7aa8;border:1px solid #2a1840;border-radius:7px;
+  padding:11px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-top:8px}
+.warn{border:1px solid rgba(255,106,92,.42);background:rgba(28,8,8,.5);border-radius:7px;
+  padding:12px 14px;margin:14px 0}
+.warn .wt{font-size:10.5px;color:#ff6a5c;font-weight:700;letter-spacing:.08em;margin-bottom:5px}
+.warn p{font-size:11.5px;margin:5px 0;color:rgba(255,220,215,.82)}
+/* play HUD */
+#hud{display:flex;justify-content:space-between;align-items:center;font-size:10px;
+  color:rgba(230,230,240,.42);letter-spacing:.05em;flex:none;margin-bottom:8px}
+#hud b{color:#cc44ff;font-variant-numeric:tabular-nums}
+#stage{flex:none;height:190px;position:relative;margin-bottom:10px}
+#viz{position:absolute;inset:0}
+#stat{flex:none;min-height:120px;border:1px solid rgba(204,68,255,.22);border-radius:9px;
+  background:rgba(14,8,24,.55);padding:15px;margin-bottom:8px}
+#big-num{font-size:34px;color:#fff;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+#stat-label{font-size:13px;color:#ffd700;margin-top:8px;line-height:1.4}
+#stat-context{font-size:11.5px;color:rgba(230,230,240,.6);margin-top:7px;line-height:1.5}
+#stat-src{font-size:9.5px;color:rgba(204,68,255,.7);letter-spacing:.04em;margin-top:9px;
+  border-top:1px solid rgba(204,68,255,.14);padding-top:7px}
+#stat-src b{color:rgba(230,230,240,.55);font-weight:400}
+#nav{flex:none;display:flex;gap:8px}
+#nav button{flex:1;background:#100a1c;color:#c8c0d8;border:1px solid #2a1840;border-radius:7px;
+  padding:12px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+#nav button:active{background:#18102a}
+#nav button:disabled{opacity:.32}
+#prog{flex:none;display:flex;gap:4px;justify-content:center;margin:9px 0 3px}
+#prog span{width:7px;height:7px;border-radius:50%;background:#2a1840}
+#prog span.on{background:#cc44ff}
+.foot{flex:none;font-size:10px;color:rgba(230,230,240,.36);text-align:center;margin-top:8px;line-height:1.5}
+.foot b{color:rgba(255,106,92,.7)}
+.note{font-size:9.5px;color:rgba(230,230,240,.34);text-align:center;margin-top:6px;line-height:1.5}
+</style></head><body>
+<canvas id="bg"></canvas>
+
+<!-- INTRO -->
+<div class="scr on" id="s-intro">
+  <div class="scroll">
+    <h1>The Scale<br>of It</h1>
+    <div class="sub">why the training ground exists</div>
+    <p>These are not the monsters. These are the <b>numbers the monsters leave behind</b>
+    &mdash; sourced, dated, and named. There is no score here and nothing to win. Each dot
+    is a person.</p>
+    <div class="warn">
+      <div class="wt">&#9888; this is heavy, and it is real</div>
+      <p>Every figure carries its source. Tap any statistic to see who counted it, when,
+      and where. Where the data undercounts, it says so.</p>
+      <p>If you are living inside these numbers: advocates do safety planning free.
+      <b>US 1-800-799-7233</b> · <b>UK 0808 2000 247</b> · <b>ES 016</b> · <b>AR 144</b> ·
+      <b>GR 15900</b> · <b>EU 116 006</b>.</p>
+    </div>
+    <p style="color:rgba(230,230,240,.4);font-size:11px">Nothing here moves until you ask
+    it to. You advance, one number at a time.</p>
+  </div>
+  <button class="big" onclick="startSim()">&#9654; BEGIN &middot; ONE NUMBER AT A TIME</button>
+  <button class="ghost" onclick="location.href='index.html'">&larr; BACK TO THE LAB</button>
+</div>
+
+<!-- PLAY -->
+<div class="scr" id="s-play">
+  <div id="hud">
+    <span id="h-chapter">PREVALENCE</span>
+    <span><b id="h-i">1</b> / <b id="h-n">10</b></span>
+  </div>
+  <div id="stage"><canvas id="viz"></canvas></div>
+  <div id="stat">
+    <div id="big-num">&hellip;</div>
+    <div id="stat-label"></div>
+    <div id="stat-context"></div>
+    <div id="stat-src"></div>
+  </div>
+  <div id="prog"></div>
+  <div id="nav">
+    <button id="btn-prev" onclick="step(-1)">&larr; back</button>
+    <button id="btn-next" onclick="step(1)">next &rarr;</button>
+  </div>
+  <div class="note">A dot is a person. A figure with no source does not appear here.</div>
+</div>
+
+<!-- END -->
+<div class="scr" id="s-end">
+  <div class="scroll">
+    <h1>This is why.</h1>
+    <div class="sub">the reading material comes first</div>
+    <p>Most of this violence <span class="r">never reaches a report</span>. Under 40% of
+    women who experience it seek any help; under 10% of those go to the police. The
+    official numbers are a sliver of the real ones.</p>
+    <p>The abuse that never gets counted is exactly the abuse a person has to
+    <b>recognise for herself</b> &mdash; unnamed, it routes back to <span class="r">&ldquo;something
+    is wrong with me.&rdquo;</span> That is what <b>the training ground</b> is for: to make
+    the moveset nameable, silently, in her own head.</p>
+    <p class="g">An app cannot solve this. It can make the patterns nameable and a number
+    reachable. Leaving safely takes people &mdash; advocates, friends, shelters, lawyers.
+    Every screen points outward.</p>
+  </div>
+  <button class="big" onclick="location.href='training-ground.html'">ENTER THE TRAINING GROUND &rarr;</button>
+  <button class="ghost" onclick="restart()">&#8635; SEE THE NUMBERS AGAIN</button>
+  <button class="ghost" onclick="location.href='index.html'">&larr; BACK TO THE LAB</button>
+</div>
+
+<script>
+// ============================================================================
+// THE SPINI SIM · data travels WITH its source (the honest boundary).
+// Each datum: {num, label, context, source, dots, color, chapter}
+//   dots = how many nodes to draw (a visual quantum, labelled in words)
+// Source: grimoire/SPINI_SIM.md  <-  grimoire/monsterStats.md
+// P=12 . chi=2 . always. No score. No reward. Motion is opt-in.
+// ============================================================================
+var PURPLE="#cc44ff", GOLD="#ffd700", RED="#ff6a5c", GREEN="#7fff9f", DIM="rgba(230,230,240,.5)";
+
+var DATA=[
+ {chapter:"PREVALENCE", color:PURPLE, dots:60,
+  num:"736 million",
+  label:"women have experienced violence \u2014 about 1 in 3, worldwide.",
+  context:"Physical/sexual intimate-partner violence or non-partner sexual violence, at least once, among women aged 15+. \u201cLargely unchanged over the past decade.\u201d",
+  source:"WHO Violence Against Women Prevalence Estimates 2018 (published 2021)"},
+
+ {chapter:"PREVALENCE", color:PURPLE, dots:27,
+  num:"27%",
+  label:"of ever-partnered women 15\u201349 have suffered intimate-partner violence in their lifetime.",
+  context:"Uncertainty interval 23\u201331%. Past-year: 13%. This is the IPV-specific figure \u2014 a different population from the 736 million above; do not conflate them.",
+  source:"WHO VAW Prevalence Estimates 2018 (UI 23\u201331%)"},
+
+ {chapter:"PREVALENCE", color:PURPLE, dots:25,
+  num:"~1 in 4",
+  label:"young women have already experienced partner violence by their mid-twenties.",
+  context:"24\u201326% of women aged 15\u201324 who have been in a relationship. It starts early, and past-year risk peaks youngest.",
+  source:"WHO VAW Prevalence Estimates 2018"},
+
+ {chapter:"PREVALENCE", color:PURPLE, dots:51,
+  num:"up to 51%",
+  label:"in the hardest-hit regions \u2014 versus 16% in the lowest.",
+  context:"Lifetime IPV reaches 51% in Melanesia; ~33% across sub-Saharan Africa and South-East Asia; lowest 16% in Southern Europe. Higher recorded rates often mean better data, not more violence.",
+  source:"WHO VAW Prevalence Estimates 2018 (SDG subregions)"},
+
+ {chapter:"LETHALITY", color:RED, dots:50,
+  num:"~50,000",
+  label:"women and girls were killed by a partner or family member in one year.",
+  context:"60% of all female intentional killings. The lethal tip of the same iceberg.",
+  source:"UNODC / UN Women, Femicides 2024 (published Nov 2025)"},
+
+ {chapter:"LETHALITY", color:RED, dots:137,
+  num:"137 a day",
+  label:"roughly one woman every ten minutes, killed by someone who was supposed to love her.",
+  context:"Averaged from the annual total. Reporting has collapsed to just 37 countries, and motive is missing in ~40% of female homicides \u2014 so this is a lower bound.",
+  source:"UNODC / UN Women, Femicides 2024"},
+
+ {chapter:"LETHALITY", color:RED, dots:60,
+  num:"60% vs 11%",
+  label:"of murdered women are killed by a partner or family \u2014 against 11% of murdered men.",
+  context:"Men are most homicide victims overall, but killed in the public sphere. For women, the danger is home. This asymmetry is the whole point.",
+  source:"UNODC / UN Women, Femicides 2024"},
+
+ {chapter:"LEAVING", color:GOLD, dots:41,
+  num:"the exit is the cliff",
+  label:"41% of women killed by a partner had separated or were trying to.",
+  context:"30% killed within the first month of separation, ~70% within the first year. Leaving a controlling partner raised homicide risk ~3.6\u00d7 (odds ratio); a gun in the home, ~7.6\u00d7.",
+  source:"UK Femicide Census; Campbell et al. 2003, Am. J. Public Health"},
+
+ {chapter:"CONTROL", color:PURPLE, dots:50,
+  num:"49,557 \u2192 853",
+  label:"coercive-control offences recorded in a year. Convictions that year: 853.",
+  context:"England & Wales, since it became a crime in 2015. One local analysis found ~3% of completed investigations led to a charge. Non-physical abuse barely survives the justice system.",
+  source:"Home Office / ONS (YE Mar 2025); MoJ / CPS (YE Dec 2024)"},
+
+ {chapter:"THE DARK FIGURE", color:RED, dots:40,
+  num:"under 40%",
+  label:"of women who experience violence seek any help at all.",
+  context:"And of those who do, under 10% go to the police. Most turn to family and friends \u2014 so well under 10% of incidents ever reach an official record.",
+  source:"UN Women global benchmark"},
+
+ {chapter:"THE DARK FIGURE", color:RED, dots:16,
+  num:"fewer than 1 in 6",
+  label:"rape victims report to police \u2014 and ~2.7% of recorded rapes are charged.",
+  context:"Of 100 who experience it: ~16 report \u2192 recorded \u2192 ~2.7% of recorded charged \u2192 convicted. Reasons given: embarrassment (40%), \u201cpolice couldn\u2019t help\u201d (38%), \u201chumiliating\u201d (34%).",
+  source:"ONS CSEW; Home Office / CPS, England & Wales (YE Dec 2024)"},
+
+ {chapter:"THE DARK FIGURE", color:PURPLE, dots:31,
+  num:"31,031+",
+  label:"devices caught running stalkerware \u2014 and that is one vendor's count.",
+  context:"Across 175 countries, up 5.8% year on year, 195 distinct apps. Real prevalence is far higher; this captures only one antivirus maker's users. Surveillance is part of the pattern.",
+  source:"Kaspersky State of Stalkerware 2023 (lower bound)"}
+];
+
+// ---------------- canvas ----------------
+var bg=document.getElementById("bg"), bx=bg.getContext("2d");
+var viz=document.getElementById("viz"), vx=viz.getContext("2d");
+var W,H,DPR, VW,VH;
+function resize(){
+  DPR=Math.min(2,window.devicePixelRatio||1);
+  W=window.innerWidth; H=window.innerHeight;
+  bg.width=W*DPR; bg.height=H*DPR; bg.style.width=W+"px"; bg.style.height=H+"px";
+  bx.setTransform(DPR,0,0,DPR,0,0);
+  var vw=viz.clientWidth||W-32, vh=viz.clientHeight||190;
+  viz.width=vw*DPR; viz.height=vh*DPR; VW=vw; VH=vh;
+  vx.setTransform(DPR,0,0,DPR,0,0);
+}
+window.addEventListener("resize",resize);
+window.addEventListener("orientationchange",function(){setTimeout(resize,140);});
+
+// ---------------- ambient background graph (slow, opt-in via being on play) ----------------
+var NODES=[], playing=false;
+function buildBg(){NODES=[]; var n=12;
+  for(var i=0;i<n;i++)NODES.push({a:i/n*6.2832, ph:Math.random()*6.28});}
+function drawBg(){
+  bx.fillStyle="#050510"; bx.fillRect(0,0,W,H);
+  if(!playing) return;
+  var t=performance.now()/1000, ox=W/2, oy=H*0.30, R=Math.min(W,H)*0.22;
+  for(var i=0;i<NODES.length;i++){var a=NODES[i];
+    a.x=ox+Math.cos(a.a+t*0.05)*R; a.y=oy+Math.sin(a.a+t*0.05)*R;}
+  for(var i=0;i<NODES.length;i++)for(var j=i+1;j<NODES.length;j++){
+    if((j-i)%3===0||(j-i)===1){
+      bx.strokeStyle="rgba(204,68,255,"+(0.05+0.03*Math.sin(t+i)).toFixed(3)+")";
+      bx.lineWidth=1; bx.beginPath();
+      bx.moveTo(NODES[i].x,NODES[i].y); bx.lineTo(NODES[j].x,NODES[j].y); bx.stroke();}}
+}
+
+// ---------------- the dot field (a dot is a person) ----------------
+var particles=[], targetColor=PURPLE, animT=0, animOn=false;
+function seedDots(count,color){
+  particles=[]; targetColor=color;
+  var cols=Math.ceil(Math.sqrt(count* (VW/Math.max(1,VH)) ));
+  var rows=Math.ceil(count/cols);
+  var gx=VW/(cols+1), gy=VH/(rows+1);
+  for(var i=0;i<count;i++){
+    var c=i%cols, r=Math.floor(i/cols);
+    particles.push({
+      // start scattered, settle to grid (motion is gentle, and only on advance)
+      x:Math.random()*VW, y:Math.random()*VH,
+      tx:gx*(c+1)+(Math.random()*6-3), ty:gy*(r+1)+(Math.random()*6-3),
+      r:2.6, delay:Math.random()*0.5});
+  }
+  animT=0; animOn=true;
+}
+function drawDots(){
+  vx.clearRect(0,0,VW,VH);
+  if(animOn){ animT+=1/60; if(animT>2.2) animOn=false; }
+  for(var i=0;i<particles.length;i++){var p=particles[i];
+    var e=Math.max(0,Math.min(1,(animT-p.delay)/0.9));
+    var k=1-Math.pow(1-e,3); // easeOutCubic
+    var x=p.x+(p.tx-p.x)*k, y=p.y+(p.ty-p.y)*k;
+    vx.globalAlpha=0.35+0.55*k;
+    vx.fillStyle=targetColor;
+    vx.beginPath(); vx.arc(x,y,p.r,0,6.2832); vx.fill();
+  }
+  vx.globalAlpha=1;
+}
+
+function loop(){ requestAnimationFrame(loop); drawBg(); if(playing) drawDots(); }
+
+// ---------------- flow ----------------
+var idx=0;
+function show(id){["s-intro","s-play","s-end"].forEach(function(s){
+  document.getElementById(s).classList.toggle("on", s===id);});}
+function buildProg(){var w=document.getElementById("prog"); w.innerHTML="";
+  for(var i=0;i<DATA.length;i++){var s=document.createElement("span"); w.appendChild(s);}}
+function startSim(){ playing=true; idx=0; show("s-play"); resize(); buildProg(); render(); }
+function restart(){ startSim(); }
+function render(){
+  var d=DATA[idx];
+  document.getElementById("h-chapter").textContent=d.chapter;
+  document.getElementById("h-i").textContent=idx+1;
+  document.getElementById("h-n").textContent=DATA.length;
+  var bn=document.getElementById("big-num"); bn.textContent=d.num; bn.style.color=d.color;
+  document.getElementById("stat-label").textContent=d.label;
+  document.getElementById("stat-context").textContent=d.context;
+  document.getElementById("stat-src").innerHTML="<b>source \u00b7</b> "+d.source;
+  var ps=document.getElementById("prog").children;
+  for(var i=0;i<ps.length;i++)ps[i].className=(i===idx?"on":"");
+  document.getElementById("btn-prev").disabled=(idx===0);
+  document.getElementById("btn-next").textContent=(idx===DATA.length-1)?"why this matters \u2192":"next \u2192";
+  seedDots(d.dots, d.color);
+}
+function step(dir){
+  if(dir>0 && idx===DATA.length-1){ playing=false; show("s-end"); return; }
+  idx=Math.max(0,Math.min(DATA.length-1, idx+dir));
+  render();
+}
+
+resize(); buildBg(); loop();
+</script>
+</body></html>
