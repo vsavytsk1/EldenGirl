@@ -34,7 +34,7 @@ COVER_DOMAIN\s*=\s*["'].+["']
 # A committed store/app cover domain (cover sites leak the pairing). Excludes the
 # infrastructure URLs that legitimately appear in manifests/plists (XML schema and
 # DTD namespaces are identifiers, not network calls) and the known safe links.
-https?://(?!schemas\.android\.com|www\.apple\.com|www\.w3\.org|github\.com|stopstalkerware\.org|thehotline\.org|www\.gnu\.org|apache\.org)[a-z0-9.-]+\.(app|io|com|net|org)/?
+https?://(?!schemas\.android\.com|www\.apple\.com|www\.w3\.org|github\.com|[a-z0-9-]+\.github\.io|stopstalkerware\.org|thehotline\.org|www\.gnu\.org|apache\.org)[a-z0-9.-]+\.(app|io|com|net|org)/?
 
 # NOTE: these patterns are a starting map, not a proof. A human reading the diff
 # is the real gate here (see CONTRIBUTING.md). No regex catches a clever leak.

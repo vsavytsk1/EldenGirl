@@ -1,6 +1,6 @@
 # ios/ — codex only (ships last, possibly never)
 
-Its own build. Shares a threat model with `web/` and `android/` and **nothing else**.
+Its own build. Shares a threat model with `docs/` and `android/` and **nothing else**.
 
 ## Why this tier is the smallest, on purpose
 

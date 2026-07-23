@@ -1,6 +1,6 @@
 # android/ — the encrypted record tier (ships second)
 
-Its own build. Shares a threat model with `web/` and `ios/` and **nothing else** — no code, no
+Its own build. Shares a threat model with `docs/` and `ios/` and **nothing else** — no code, no
 storage, no release cycle (`docs/THE_APP_v1_5.md`, Part 0).
 
 ## What is here now

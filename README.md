@@ -38,31 +38,33 @@ code, no storage, no release cycle. (`docs/THE_APP_v1_5.md`, Part 0.)
 
 | tier | what it is | writes | platform | ship |
 |---|---|---|---|---|
-| [`lab/`](lab/) | the concept lab — every idea, as pure text + clicks | **0 bytes** | any browser | **where concepts start** |
-| [`web/`](web/) | the codex + training ground | **0 bytes** | any browser | **first — it exists** |
+| [`docs/`](docs/) | the concept site + published spec — pure text + clicks | **0 bytes** | any browser | **first — it's the Pages site** |
 | [`android/`](android/) | the encrypted record + dead-drop export | KB ciphertext | Android | second |
 | [`ios/`](ios/) | the codex, read-only | 0 bytes | iOS | last, possibly never |
 
-## The concept lab — how we test ideas in the open
+## The concept lab lives in `docs/` — how we test ideas in the open
 
-[`lab/`](lab/) is the front door and the workshop. Every concept begins here as **pure,
+[`docs/`](docs/) is the front door, the workshop, **and the live site**
+(<https://vsavytsk1.github.io/EldenGirl/>). Every concept begins here as **pure,
 dependency-free HTML + JS — text and clicks first** — so the community can open it, read every
 line, and judge the idea and its path *before* any UI dopamine layer goes on top, and long
 before anything native. Only once a concept holds does it earn the goblin layers (the juice, the
-creature, the game feel), all of it later wrapped in the secure, disguised app.
+creature, the game feel), all of it later wrapped in the secure, disguised app. The published
+specification lives here too, because it is meant to be read publicly (Part VII).
 
 **This is a monolith on purpose — no branches, no release trains for the concepts.** A concept
-nobody can read is a concept nobody can trust. Everything in `lab/` obeys the same zero-write law
-as the rest (G4 scans it): no storage, no network, no install trace. It is served as a static
-site (GitHub Pages) and handed over as a URL.
+nobody can read is a concept nobody can trust. Everything in `docs/` obeys the same zero-write
+law as the rest (G4 scans its HTML/JS): no storage, no network, no install trace. It is served
+as a static site (GitHub Pages) and handed over as a URL.
 
-- **Enable it:** repo **Settings → Pages → Deploy from a branch → `main` / `/lab` folder**.
-- Add a new concept by dropping a self-contained `.html` file into `lab/` and linking it from
-  [`lab/index.html`](lab/index.html). No build step. The gates run on it automatically.
+- **It is already live:** repo **Settings → Pages → Deploy from a branch → `main` / `/docs`**
+  (GitHub Pages only serves `/(root)` or `/docs`, which is why the concept site lives in `docs/`).
+- Add a new concept by dropping a self-contained `.html` file into `docs/` and linking it from
+  [`docs/index.html`](docs/index.html). No build step. The gates run on it automatically.
 
 ## What ships first
 
-The [`web/`](web/) tier. It leaves no install record, needs no store approval, runs on a
+The [`docs/`](docs/) site. It leaves no install record, needs no store approval, runs on a
 borrowed machine, and can be handed over as a spoken URL. It holds no user data, so there is
 nothing to leak. Native comes second — disguised, with the encrypted record a browser cannot
 store safely.
@@ -73,7 +75,7 @@ store safely.
 
 ```
 1  the gates       — executable safety invariants, before a line of product code
-2  web/            — one HTML file, zero writes, ships immediately
+2  docs/           — the concept site, zero writes, ships immediately
 3  android/ cover  — a calculator that is genuinely a calculator. no real tier yet.
 4  android/ entry  — three factors, three seconds, no failure state
 5  android/ record — encrypted, weekly export prompt, crypto-shred, dead drop

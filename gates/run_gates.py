@@ -24,12 +24,11 @@
 # SCOPING NOTE (important and deliberate):
 #   G3 (forbidden lexicon) and G11 (cover identity) scan the DISGUISED tiers and
 #   build config — android/, ios/, and gradle/build files. They do NOT scan:
-#     - docs/       : the human-authored threat-model spec, which discusses the subject
-#                     by necessity and is meant to be published (THE_APP.md Part VII).
-#     - web/, lab/  : the codex/training ground/concept lab, PUBLIC by design — no
-#                     disguise, handed over as a URL, holds no user data. Still bound
-#                     by G4 zero-write, which DOES scan them.
-#     - gates/      : these files literally define the forbidden terms and identity shapes.
+#     - docs/   : the concept site + human-authored threat-model spec, which discusses
+#                 the subject by necessity and is meant to be published (Part VII), and
+#                 is the GitHub Pages site. PUBLIC by design — exempt from lexicon/identity,
+#                 but STILL bound by G4 zero-write, which DOES scan its html/js.
+#     - gates/  : these files literally define the forbidden terms and identity shapes.
 #   The gate's job is to keep the subject and the chosen cover out of the DISGUISED
 #   artefacts, not to censor the published specification.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -47,12 +46,13 @@ GATES = REPO / "gates"
 
 # Tiers that carry a disguise and therefore must say nothing.
 DISGUISED_TIERS = ["android", "ios"]
-# Public, zero-write reading tiers: the codex/training ground served to a browser.
-# They are public BY DESIGN (no disguise, handed over as a URL, hold no user data),
-# so they are exempt from the lexicon/identity scans but STILL bound by zero-write.
-PUBLIC_WEB_TIERS = ["web", "lab"]
+# The public, zero-write reading tier: the concept site + spec served to a browser
+# (GitHub Pages only serves /(root) or /docs, so docs/ IS the site). It is public
+# BY DESIGN (no disguise, handed over as a URL, holds no user data), so it is exempt
+# from the lexicon/identity scans but STILL bound by the zero-write law (G4).
+PUBLIC_WEB_TIERS = ["docs"]
 # Directories never scanned for lexicon / identity (see SCOPING NOTE above).
-SCAN_EXCLUDE_DIRS = {".git", "docs", "web", "lab", "gates", "node_modules", "build",
+SCAN_EXCLUDE_DIRS = {".git", "docs", "gates", "node_modules", "build",
                      ".gradle", "DerivedData", ".idea"}
 SOURCE_EXTS = {".kt", ".kts", ".java", ".swift", ".xml", ".plist", ".gradle",
                ".properties", ".pro", ".m", ".h", ".mm", ".entitlements"}
