@@ -34,6 +34,10 @@ captures/
 mapping.txt
 **/outputs/mapping/**
 
+# Generated launcher icons — produced at build time from COVER_ICON_SEED (G10),
+# never committed. The generator lives at android/tools/generate_launcher_icon.py.
+android/app/src/main/res/mipmap-*/ic_launcher.png
+
 # iOS build + generated project material
 DerivedData/
 *.xcworkspace/xcuserdata/

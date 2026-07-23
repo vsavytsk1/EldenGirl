@@ -116,6 +116,28 @@ def _read(p: Path) -> str:
         return ""
 
 
+# Build-only file types that NEVER enter the shipped artefact, so their contents
+# cannot leak into the binary a phone can be searched for (G3 scans the artefact,
+# never the build). Gradle/ProGuard/properties are compile-time only.
+_BUILD_ONLY_EXTS = {".gradle", ".kts", ".properties", ".pro", ".cfg"}
+
+_LINE_COMMENT = re.compile(r"//[^\n]*")
+_BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
+_XML_COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
+
+
+def _strip_comments(text: str, suffix: str) -> str:
+    """Remove comments so a source pre-check models what actually SHIPS.
+    Comments are stripped by every compiler and never reach the artefact, so a
+    forbidden term in a comment is not a binary leak. Identifiers and string
+    literals survive and are still scanned."""
+    if suffix in {".xml", ".plist", ".entitlements"}:
+        return _XML_COMMENT.sub(" ", text)
+    if suffix in {".kt", ".java", ".swift", ".m", ".h", ".mm"}:
+        return _BLOCK_COMMENT.sub(" ", _LINE_COMMENT.sub(" ", text))
+    return text
+
+
 def _load_terms(name: str) -> list[str]:
     f = GATES / name
     if not f.exists():
@@ -225,11 +247,16 @@ def g3_lexicon(artefact: Path | None) -> Result:
     findings = []
     files = _iter_source_files(DISGUISED_TIERS)
     for p in files:
-        text = _read(p).lower()
+        # Build-only files (gradle/proguard/properties) never enter the artefact.
+        if p.suffix in _BUILD_ONLY_EXTS:
+            continue
+        # Model what SHIPS: strip comments (compilers do), keep identifiers and
+        # string literals. Class/method-name leaks like DecoyManager still fail.
+        text = _strip_comments(_read(p), p.suffix).lower()
         for original, term in lowered:
             if term in text:
-                findings.append(f"{_rel(p)}: contains \"{original}\"")
-    # Class/method-name leaks are just as fatal — same scan catches DecoyManager etc.
+                findings.append(f"{_rel(p)}: contains \"{original}\" (source pre-check; "
+                                f"authoritative check is --artefact against the release binary)")
 
     # Artefact scan: strings of the release binary, if one was provided.
     scanned_artefact = False

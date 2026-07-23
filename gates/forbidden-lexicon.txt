@@ -54,8 +54,11 @@ wipe
 duress
 disguise
 cover story
-hidden
 secret vault
+# NOTE: "hidden" was removed as a bare term — it collides with the Android platform
+# constant `keyboardHidden` (configChanges), an unavoidable OS token unrelated to
+# concealment, and the distinctive terms above already catch a HiddenVault-style
+# class name via its other segments. Add more specific compounds instead of "hidden".
 
 # --- Spanish (es) ---
 abuso

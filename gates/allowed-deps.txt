@@ -18,16 +18,19 @@
 # ─────────────────────────────────────────────────────────────────────────
 
 # --- Kotlin standard library (compiler-bundled runtime) ---
-# org.jetbrains.kotlin:kotlin-stdlib:<pinned>
+org.jetbrains.kotlin:kotlin-stdlib:2.0.20
 
 # --- AndroidX (platform Jetpack; enumerate exactly what release resolves) ---
-# androidx.core:core-ktx:<pinned>
-# androidx.activity:activity-compose:<pinned>
-# androidx.compose.ui:ui:<pinned>
-# androidx.compose.foundation:foundation:<pinned>
+# reason: the calculator cover's UI. Compose FOUNDATION only — no Material, so the
+# surface stays minimal (S8 spirit): layout, text and click, nothing more.
+androidx.core:core-ktx:1.13.1
+androidx.activity:activity-compose:1.9.2
+androidx.compose.ui:ui:1.7.2
+androidx.compose.foundation:foundation:1.7.2
 
 # --- Encrypted store (the ONE justified native dependency for the record tier) ---
+# Uncomment ONLY when the record tier is built, by a human, with a commit-message reason.
 # net.zetetic:sqlcipher-android:<pinned>   # reason: S4 encrypted-at-rest store; audited; no network
 
-# NOTE: nothing is uncommented until the android/ module has a real, pinned build.
-# An empty effective allowlist is the correct default.
+# NOTE: each line above is a human decision. The transitive check in CI resolves the
+# full release classpath against this file; keep it exact and pinned, never wildcarded.

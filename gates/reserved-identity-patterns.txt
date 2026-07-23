@@ -21,8 +21,9 @@
 # A concrete package/namespace declaration outside the placeholder namespace.
 namespace\s*=\s*["'](?!org\.placeholder)[a-z][a-z0-9_]+(\.[a-z0-9_]+){2,}["']
 
-# iOS bundle identifier set to anything other than the placeholder.
-CFBundleIdentifier.*(?!org\.placeholder)
+# iOS bundle identifier LITERAL set to a concrete reverse-DNS value (not a build
+# variable like $(PRODUCT_BUNDLE_IDENTIFIER) and not the placeholder namespace).
+<key>CFBundleIdentifier</key>\s*<string>(?!\$\()(?!org\.placeholder)[a-z][a-z0-9_]+(\.[a-z0-9_]+){2,}</string>
 
 # A concrete cover display name assigned to the COVER_NAME parameter
 # (i.e. COVER_NAME set to something that is not the literal placeholder token).
@@ -30,8 +31,10 @@ COVER_NAME\s*=\s*["'](?!PLACEHOLDER)[^"']+["']
 COVER_PACKAGE\s*=\s*["'](?!org\.placeholder)[^"']+["']
 COVER_DOMAIN\s*=\s*["'].+["']
 
-# A committed store/app domain (cover sites leak the pairing).
-https?://(?!github\.com|stopstalkerware\.org|thehotline\.org)[a-z0-9.-]+\.(app|io|com|net|org)/?
+# A committed store/app cover domain (cover sites leak the pairing). Excludes the
+# infrastructure URLs that legitimately appear in manifests/plists (XML schema and
+# DTD namespaces are identifiers, not network calls) and the known safe links.
+https?://(?!schemas\.android\.com|www\.apple\.com|www\.w3\.org|github\.com|stopstalkerware\.org|thehotline\.org|www\.gnu\.org|apache\.org)[a-z0-9.-]+\.(app|io|com|net|org)/?
 
 # NOTE: these patterns are a starting map, not a proof. A human reading the diff
 # is the real gate here (see CONTRIBUTING.md). No regex catches a clever leak.

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- No Material dependency: a plain platform theme. No splash screen, no
+         branding, nothing that hints at anything beyond a calculator. -->
+    <style name="Theme.Cover" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#0B0B0F</item>
+        <item name="android:navigationBarColor">#0B0B0F</item>
+        <item name="android:windowBackground">#0B0B0F</item>
+    </style>
+</resources>

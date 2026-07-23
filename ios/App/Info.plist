@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    G1 (iOS form): NOT ONE NS*UsageDescription key. A calculator that asks for the
+    microphone is not a question mark, it is an answer (v1.5 III·8). No permission
+    prompt ever appears, because the app never requests a capability that needs one.
+    G3 (iOS form): CFBundleDisplayName is the placeholder; the real cover name is
+    injected at build time and never committed (v1.5 Part I).
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDisplayName</key>
+    <string>$(COVER_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleName</key>
+    <string>$(PRODUCT_NAME)</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>UILaunchScreen</key>
+    <dict/>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+    <!-- No NSCameraUsageDescription. No NSMicrophoneUsageDescription.
+         No NSLocationWhenInUseUsageDescription. No NSContactsUsageDescription.
+         None. Adding any is a G1 failure. -->
+</dict>
+</plist>
