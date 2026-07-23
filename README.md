@@ -38,9 +38,27 @@ code, no storage, no release cycle. (`docs/THE_APP_v1_5.md`, Part 0.)
 
 | tier | what it is | writes | platform | ship |
 |---|---|---|---|---|
+| [`lab/`](lab/) | the concept lab — every idea, as pure text + clicks | **0 bytes** | any browser | **where concepts start** |
 | [`web/`](web/) | the codex + training ground | **0 bytes** | any browser | **first — it exists** |
 | [`android/`](android/) | the encrypted record + dead-drop export | KB ciphertext | Android | second |
 | [`ios/`](ios/) | the codex, read-only | 0 bytes | iOS | last, possibly never |
+
+## The concept lab — how we test ideas in the open
+
+[`lab/`](lab/) is the front door and the workshop. Every concept begins here as **pure,
+dependency-free HTML + JS — text and clicks first** — so the community can open it, read every
+line, and judge the idea and its path *before* any UI dopamine layer goes on top, and long
+before anything native. Only once a concept holds does it earn the goblin layers (the juice, the
+creature, the game feel), all of it later wrapped in the secure, disguised app.
+
+**This is a monolith on purpose — no branches, no release trains for the concepts.** A concept
+nobody can read is a concept nobody can trust. Everything in `lab/` obeys the same zero-write law
+as the rest (G4 scans it): no storage, no network, no install trace. It is served as a static
+site (GitHub Pages) and handed over as a URL.
+
+- **Enable it:** repo **Settings → Pages → Deploy from a branch → `main` / `/lab` folder**.
+- Add a new concept by dropping a self-contained `.html` file into `lab/` and linking it from
+  [`lab/index.html`](lab/index.html). No build step. The gates run on it automatically.
 
 ## What ships first
 

@@ -1,0 +1,149 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050510">
+<meta name="robots" content="noindex">
+<title>EldenGirl · the concept lab</title>
+<!--
+  THE CONCEPT LAB — the public front of the project.
+  Pure HTML + inline CSS. No script, no storage, no network, no fonts from a CDN,
+  no analytics. It writes ZERO bytes (G4). This is the reading material the spec
+  says to ship first (THE_APP.md Part VI) and the threat model it says to publish
+  (Part VII). It is NOT the disguised app; there is nothing here to hide.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:#050510;color:#e6e6f0;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  line-height:1.62;overflow-x:hidden;
+  padding:calc(env(safe-area-inset-top) + 34px) 20px calc(env(safe-area-inset-bottom) + 60px)}
+.wrap{max-width:720px;margin:0 auto}
+h1{font-size:30px;color:#cc44ff;letter-spacing:.06em;text-transform:uppercase;
+  font-weight:700;line-height:1.1}
+.tag{font-size:11px;color:rgba(204,68,255,.62);letter-spacing:.14em;
+  text-transform:uppercase;margin-top:8px}
+h2{font-size:15px;color:#ffd700;letter-spacing:.1em;text-transform:uppercase;
+  margin:38px 0 10px;font-weight:700}
+p{font-size:13.5px;color:rgba(230,230,240,.72);margin:9px 0}
+p b{color:#ffd700}p .g{color:#7fff9f}p .r{color:#ff6a5c}
+a{color:#cc44ff}
+.lede{font-size:15px;color:rgba(230,230,240,.85);margin-top:18px;
+  border-left:2px solid #cc44ff;padding-left:14px}
+.warn{border:1px solid rgba(255,106,92,.45);background:rgba(28,8,8,.55);
+  border-radius:8px;padding:14px 16px;margin:22px 0}
+.warn .wt{font-size:11px;color:#ff6a5c;font-weight:700;letter-spacing:.09em;margin-bottom:6px}
+.warn p{font-size:12px;margin:6px 0;color:rgba(255,220,215,.82)}
+.cards{display:flex;flex-direction:column;gap:12px;margin:16px 0}
+.card{display:block;text-decoration:none;border:1px solid #2a1840;border-radius:9px;
+  padding:16px 17px;background:rgba(16,10,28,.6);transition:border-color .18s,transform .1s}
+.card:hover{border-color:#cc44ff}
+.card:active{transform:scale(.99)}
+.card .t{font-size:14.5px;color:#e8e0f5;font-weight:700;letter-spacing:.03em}
+.card .d{font-size:11.5px;color:rgba(230,230,240,.5);margin-top:5px;line-height:1.5}
+.card .go{font-size:10px;color:#7fff9f;letter-spacing:.1em;text-transform:uppercase;margin-top:9px}
+.soon{opacity:.5}.soon:hover{border-color:#2a1840}
+.soon .go{color:rgba(230,230,240,.4)}
+.pill{display:inline-block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:#050510;background:#7fff9f;border-radius:20px;padding:3px 9px;margin-left:7px}
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+td{padding:6px 8px;border-bottom:1px solid rgba(204,68,255,.12);color:rgba(230,230,240,.6)}
+td:first-child{color:#ffd700;white-space:nowrap}
+.stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-size:10.5px;letter-spacing:.05em;border:1px solid #2a1840;border-radius:6px;
+  padding:5px 9px;color:rgba(230,230,240,.6)}
+footer{margin-top:46px;padding-top:18px;border-top:1px solid rgba(204,68,255,.14);
+  font-size:11px;color:rgba(230,230,240,.4)}
+footer b{color:rgba(204,68,255,.75)}
+.sig{color:rgba(204,68,255,.6);letter-spacing:.14em;margin-top:12px;font-size:11px}
+</style></head><body>
+<div class="wrap">
+
+  <h1>EldenGirl</h1>
+  <div class="tag">the concept lab · text and clicks first</div>
+
+  <p class="lede">A safety-first toolkit for <b>recognising coercive control</b>.
+  It works because the tactics work in the dark &mdash; unnamed, they route back to
+  <span class="r">&ldquo;something is wrong with me.&rdquo;</span> Name them and they stop
+  being weather and become a <b>moveset</b>.</p>
+
+  <div class="warn">
+    <div class="wt">&#9888; before anything else</div>
+    <p>Your phone may not be private. If someone else has access to your device or your
+    accounts, read this on a library or a friend&rsquo;s device.</p>
+    <p>Danger now &mdash; advocates do safety planning free:
+    <b>US 1-800-799-7233</b> · <b>UK 0808 2000 247</b> · <b>ES 016</b> ·
+    <b>AR 144</b> · <b>GR 15900</b> · <b>EU 116 006</b>.</p>
+  </div>
+
+  <h2>How this gets built</h2>
+  <p>Every idea starts here as <b>pure text and clicks</b> &mdash; one HTML file, no
+  dependencies, no build step, and it writes <span class="g">zero bytes</span> to your
+  device. We test the concept and the path in the community <i>before</i> a single UI
+  dopamine layer goes on top, and long before anything native.</p>
+  <p>Only once a concept holds does it earn the goblin layers &mdash; the juice, the
+  creature, the game feel &mdash; and only then is it wrapped in the
+  <b>secure, disguised app</b>. Text first. Delight second. Encryption around all of it.</p>
+
+  <h2>Try the concepts</h2>
+  <div class="cards">
+    <a class="card" href="training-ground.html">
+      <div class="t">The Training Ground <span class="pill">live</span></div>
+      <div class="d">Name the tactic. Round 1 the moveset, round 2 the clean line, round 3
+      the chain and the tell. Mochi comes along. Earned, predictable rewards only &mdash;
+      never the variable-ratio hook the game exists to teach against.</div>
+      <div class="go">enter &rarr;</div>
+    </a>
+    <div class="card soon">
+      <div class="t">The Codex</div>
+      <div class="d">The moveset as a plain reference &mdash; every tactic, its tell, and a
+      line you would actually hear. Coming out of the training ground into its own page.</div>
+      <div class="go">in the lab</div>
+    </div>
+    <div class="card soon">
+      <div class="t">The Escape Hatch</div>
+      <div class="d">The device-safety primer and the helpline directory, offline and
+      region-aware from locale only &mdash; never from location.</div>
+      <div class="go">in the lab</div>
+    </div>
+  </div>
+
+  <h2>Why a lab, and no branches</h2>
+  <p>This is a <b>monolith on purpose</b>. No branches, no release trains for the concepts:
+  each one is just text and clicks that anyone can open, read, and judge. That is the whole
+  point &mdash; <span class="g">a survivor&rsquo;s technical friend should be able to verify
+  every line</span>, and a concept nobody can read is a concept nobody can trust.</p>
+
+  <table>
+    <tr><td>writes</td><td>0 bytes &mdash; no storage, no cookies, no service worker</td></tr>
+    <tr><td>network</td><td>none &mdash; works fully offline, nothing phones home</td></tr>
+    <tr><td>install</td><td>none &mdash; no manifest, leaves no trace, handed over as a URL</td></tr>
+    <tr><td>deps</td><td>zero &mdash; every file is self-contained HTML + inline JS</td></tr>
+  </table>
+
+  <h2>The rest of the project</h2>
+  <p>The concept lab is the front door. Behind it, three tiers share a threat model and
+  nothing else &mdash; the reading material here, an encrypted record on Android, and a
+  read-only codex on iOS. Every promise is compiled into gates that <b>fail the build</b>
+  rather than warn.</p>
+  <div class="stack">
+    <span class="chip">threat model first</span>
+    <span class="chip">local-only, no server</span>
+    <span class="chip">disguised by default</span>
+    <span class="chip">quick exit everywhere</span>
+    <span class="chip">no location, ever</span>
+    <span class="chip">no analytics</span>
+    <span class="chip">open source · MIT</span>
+  </div>
+  <p style="margin-top:14px">Read the specification and the gates on
+  <a href="https://github.com/vsavytsk1/EldenGirl">GitHub</a>. Build it, fork it, improve it.</p>
+
+  <footer>
+    <b>Standing on the shoulders of</b> NNEDV Safety Net · the Coalition Against
+    Stalkerware · and the work of Bancroft, Stark, Herman and Freyd, which is the content
+    this only carries.
+    <div class="sig">A spell hoarded rots. A spell passed on grows. · P = 12 · &chi; = 2 · always.</div>
+  </footer>
+
+</div>
+</body></html>

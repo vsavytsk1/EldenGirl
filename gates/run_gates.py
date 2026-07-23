@@ -24,11 +24,12 @@
 # SCOPING NOTE (important and deliberate):
 #   G3 (forbidden lexicon) and G11 (cover identity) scan the DISGUISED tiers and
 #   build config — android/, ios/, and gradle/build files. They do NOT scan:
-#     - docs/   : the human-authored threat-model spec, which discusses the subject
-#                 by necessity and is meant to be published (THE_APP.md Part VII).
-#     - web/    : the codex/training ground, which is PUBLIC by design — no disguise,
-#                 handed over as a URL, holds no user data.
-#     - gates/  : these files literally define the forbidden terms and identity shapes.
+#     - docs/       : the human-authored threat-model spec, which discusses the subject
+#                     by necessity and is meant to be published (THE_APP.md Part VII).
+#     - web/, lab/  : the codex/training ground/concept lab, PUBLIC by design — no
+#                     disguise, handed over as a URL, holds no user data. Still bound
+#                     by G4 zero-write, which DOES scan them.
+#     - gates/      : these files literally define the forbidden terms and identity shapes.
 #   The gate's job is to keep the subject and the chosen cover out of the DISGUISED
 #   artefacts, not to censor the published specification.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -46,8 +47,12 @@ GATES = REPO / "gates"
 
 # Tiers that carry a disguise and therefore must say nothing.
 DISGUISED_TIERS = ["android", "ios"]
+# Public, zero-write reading tiers: the codex/training ground served to a browser.
+# They are public BY DESIGN (no disguise, handed over as a URL, hold no user data),
+# so they are exempt from the lexicon/identity scans but STILL bound by zero-write.
+PUBLIC_WEB_TIERS = ["web", "lab"]
 # Directories never scanned for lexicon / identity (see SCOPING NOTE above).
-SCAN_EXCLUDE_DIRS = {".git", "docs", "web", "gates", "node_modules", "build",
+SCAN_EXCLUDE_DIRS = {".git", "docs", "web", "lab", "gates", "node_modules", "build",
                      ".gradle", "DerivedData", ".idea"}
 SOURCE_EXTS = {".kt", ".kts", ".java", ".swift", ".xml", ".plist", ".gradle",
                ".properties", ".pro", ".m", ".h", ".mm", ".entitlements"}
@@ -292,39 +297,42 @@ def _extract_strings(blob: bytes, minlen: int = 4) -> list[str]:
     return out
 
 
-# ── G4 · ZERO WRITES (web tier static form; android is an instrumented test) ─
+# ── G4 · ZERO WRITES (web tiers static form; android is an instrumented test) ─
 def g4_zero_write(artefact: Path | None) -> Result:
     title = "Zero writes"
     trace = "v1.4 Part III"
-    web = REPO / "web"
-    if not web.exists():
-        return Result("G4", title, SKIP, "no web/ tier present")
+    roots = [REPO / t for t in PUBLIC_WEB_TIERS if (REPO / t).exists()]
+    if not roots:
+        return Result("G4", title, SKIP, "no web/ or lab/ tier present")
 
     findings = []
-    # A manifest or service worker makes the browser want to INSTALL the page — banned.
-    for bad in list(web.rglob("manifest.json")) + list(web.rglob("*serviceworker*")) \
-            + list(web.rglob("sw.js")) + list(web.rglob("service-worker.js")):
-        findings.append(f"{_rel(bad)}: web build must not be installable")
-
-    # Static: no persistence API may appear in the shipped HTML/JS.
+    # Static: no persistence API may appear in any shipped HTML/JS.
     storage_re = re.compile(
         r"\b(localStorage|sessionStorage|indexedDB|openDatabase|document\.cookie|"
         r"navigator\.storage|caches\.open|serviceWorker\.register|new\s+Worker)\b")
     net_re = re.compile(r"\b(fetch\s*\(|XMLHttpRequest|navigator\.sendBeacon|WebSocket|EventSource)\b")
-    for p in list(web.rglob("*.html")) + list(web.rglob("*.js")):
-        text = _read(p)
-        for m in storage_re.finditer(text):
-            findings.append(f"{_rel(p)}: persistence API '{m.group(1)}' (must write 0 bytes)")
-        for m in net_re.finditer(text):
-            findings.append(f"{_rel(p)}: network call '{m.group(1)}' (must work fully offline, S8)")
+    scanned = 0
+    for root in roots:
+        # A manifest or service worker makes the browser want to INSTALL the page — banned.
+        for bad in list(root.rglob("manifest.json")) + list(root.rglob("*serviceworker*")) \
+                + list(root.rglob("sw.js")) + list(root.rglob("service-worker.js")):
+            findings.append(f"{_rel(bad)}: must not be installable (no manifest / service worker)")
+        for p in list(root.rglob("*.html")) + list(root.rglob("*.js")):
+            scanned += 1
+            text = _read(p)
+            for m in storage_re.finditer(text):
+                findings.append(f"{_rel(p)}: persistence API '{m.group(1)}' (must write 0 bytes)")
+            for m in net_re.finditer(text):
+                findings.append(f"{_rel(p)}: network call '{m.group(1)}' (must work fully offline, S8)")
 
     if findings:
         return Result("G4", title, FAIL,
-                      f"[{trace}] one hour of use must change zero bytes; the web tier "
-                      f"stores nothing and calls nothing", findings)
+                      f"[{trace}] one hour of use must change zero bytes; the public web "
+                      f"tiers store nothing and call nothing", findings)
+    tiers = " + ".join(f"{t}/" for t in PUBLIC_WEB_TIERS if (REPO / t).exists())
     return Result("G4", title, PASS,
-                  "web/ uses no storage or network API and is not installable "
-                  "(android sandbox zero-write is an instrumented test — see THE_GATES.md G4)")
+                  f"{tiers} use no storage or network API and are not installable "
+                  f"({scanned} file(s); android sandbox zero-write is an instrumented test — G4)")
 
 
 # ── G5 · FLAG_SECURE EVERYWHERE ──────────────────────────────────────────────
