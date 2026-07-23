@@ -1,0 +1,49 @@
+# ─────────────────────────────────────────────────────────────────────────
+# THE GATES in CI. Every gate fails the build; none of them warn.
+# This runs on every push and pull request and blocks the merge on any failure.
+# Make it a required status check in branch protection so yellow cannot merge.
+# ─────────────────────────────────────────────────────────────────────────
+name: gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# No secrets are needed and none should be exposed to this workflow.
+permissions:
+  contents: read
+
+concurrency:
+  group: gates-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    name: safety invariants
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # The gate runner is standard-library only (S8 applies to our own tooling).
+      # No pip install step exists on purpose.
+      - name: Run the full gate set
+        run: python gates/run_gates.py
+
+  # Placeholder for the artefact-level gates (G1 merged manifest, G2 resolved
+  # graph, G3 binary strings, G4 android zero-write, G5 runtime FLAG_SECURE,
+  # G7 backup config). These wire in once android/ produces a release build.
+  # Kept as a documented, skipped job so the intent is visible in CI, not lost.
+  artefact-gates:
+    name: artefact gates (enable when android/ builds)
+    runs-on: ubuntu-latest
+    if: false
+    steps:
+      - run: echo "Enable once ./gradlew assembleRelease produces an artefact to scan."

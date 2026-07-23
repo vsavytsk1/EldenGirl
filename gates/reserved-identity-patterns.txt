@@ -1,0 +1,37 @@
+# ─────────────────────────────────────────────────────────────────────────
+# G11 · THE COVER IDENTITY IS NOT IN THE REPO.
+# Traces to: v1.5 Part I.
+#
+# The gate that protects the disguise from the search engine. These are
+# case-insensitive regex fragments; G11 fails the build if ANY tracked file
+# (excluding .git and the gates/ config itself) matches one.
+#
+# This file lists the SHAPES a real cover identity would take, so a leaked
+# placeholder-replacement is caught. It must NOT itself contain any real
+# candidate cover name — listing "Calculator Plus" here to detect it would
+# leak it. We match the STRUCTURE instead.
+#
+# One regex per line. '#' comments and blank lines ignored.
+# ─────────────────────────────────────────────────────────────────────────
+
+# A concrete application id that is NOT the reserved placeholder namespace.
+# (org.placeholder.* is the only permitted value; anything else is a real identity.)
+^(?!.*org\.placeholder)applicationId\s*=\s*["'][a-z][a-z0-9_]+(\.[a-z][a-z0-9_]+){2,}["']
+
+# A concrete package/namespace declaration outside the placeholder namespace.
+namespace\s*=\s*["'](?!org\.placeholder)[a-z][a-z0-9_]+(\.[a-z0-9_]+){2,}["']
+
+# iOS bundle identifier set to anything other than the placeholder.
+CFBundleIdentifier.*(?!org\.placeholder)
+
+# A concrete cover display name assigned to the COVER_NAME parameter
+# (i.e. COVER_NAME set to something that is not the literal placeholder token).
+COVER_NAME\s*=\s*["'](?!PLACEHOLDER)[^"']+["']
+COVER_PACKAGE\s*=\s*["'](?!org\.placeholder)[^"']+["']
+COVER_DOMAIN\s*=\s*["'].+["']
+
+# A committed store/app domain (cover sites leak the pairing).
+https?://(?!github\.com|stopstalkerware\.org|thehotline\.org)[a-z0-9.-]+\.(app|io|com|net|org)/?
+
+# NOTE: these patterns are a starting map, not a proof. A human reading the diff
+# is the real gate here (see CONTRIBUTING.md). No regex catches a clever leak.

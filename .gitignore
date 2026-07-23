@@ -1,0 +1,61 @@
+# ─────────────────────────────────────────────────────────────────────────
+# THE COVER IDENTITY AND ITS KEYS NEVER ENTER THE REPOSITORY (v1.5 Part I, G11)
+# ─────────────────────────────────────────────────────────────────────────
+# Signing material — a committed key is a burned key.
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.mobileprovision
+*.cer
+*.certSigningRequest
+keystore.properties
+signing.properties
+
+# Real cover identity is a build parameter with NO default. Local overrides
+# that carry a chosen cover name/package/domain stay OFF the index.
+cover.properties
+cover.local.properties
+local.properties
+*.local.properties
+
+# ─────────────────────────────────────────────────────────────────────────
+# Build outputs — G3/G1 check the artefact; the artefact is never committed.
+# ─────────────────────────────────────────────────────────────────────────
+build/
+*/build/
+.gradle/
+captures/
+*.apk
+*.aab
+*.ap_
+*.dex
+# R8/ProGuard mapping is a de-obfuscation key — never ship it, never commit it (G6).
+mapping.txt
+**/outputs/mapping/**
+
+# iOS build + generated project material
+DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+# Third-party package managers are banned (G2) — if a tool creates these, do not commit.
+Podfile.lock
+Cartfile.resolved
+Package.resolved
+Pods/
+Carthage/
+
+# ─────────────────────────────────────────────────────────────────────────
+# Tooling noise
+# ─────────────────────────────────────────────────────────────────────────
+node_modules/
+test-results/
+playwright-report/
+.playwright/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+/tmp/
+*.log

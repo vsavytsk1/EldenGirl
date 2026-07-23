@@ -1,0 +1,23 @@
+# Consistent line endings for everyone who clones, on any OS.
+# Text is normalised to LF in the repo; Git checks it out natively per platform.
+* text=auto eol=lf
+
+# Windows-only files keep CRLF if we ever add them.
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+
+# Shell scripts and the git hook MUST stay LF or they will not run.
+*.sh        text eol=lf
+gates/*.py  text eol=lf
+
+# Binary types git should never try to diff or normalise.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.webp binary
+*.gif  binary
+*.apk  binary
+*.aab  binary
+*.keystore binary
+*.jks  binary
+*.p12  binary

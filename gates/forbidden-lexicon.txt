@@ -1,0 +1,77 @@
+# ─────────────────────────────────────────────────────────────────────────
+# G3 · THE STRING TABLE SAYS NOTHING.
+# Traces to: v1.2 D3 — "no strings in the binary containing…".
+#
+# Checked against the RELEASE artefact, post-shrinking — DEX strings, resources,
+# and (Android) class/method names — because that is what he can pull off the phone.
+# The content payload is encrypted at rest and decrypted in memory, so NO codex text
+# should appear in the binary at all. If this gate passes only because you spelled
+# things carefully, it is NOT passing.
+#
+# One term per line. Case-insensitive, matched as a fixed substring.
+# Lines starting with '#' and blank lines are ignored.
+# Add every language you localise into.
+#
+# ⚠️ This also catches class and method names: DecoyManager, PanicWipe, AbuseTactic
+#    survive into DEX unless obfuscated — and obfuscation is not a substitute for
+#    not naming them that.
+# ─────────────────────────────────────────────────────────────────────────
+
+# --- English: the subject matter ---
+abuse
+abusive
+coercive
+coercion
+control
+violence
+domestic
+survivor
+victim
+perpetrator
+stalker
+stalkerware
+helpline
+hotline
+shelter
+refuge
+escape
+safety plan
+restraining
+protection order
+evidence
+disclosure
+threat
+manipulation
+gaslight
+gaslighting
+darvo
+
+# --- English: the mechanism (class/method-name leaks) ---
+decoy
+panic
+panicwipe
+wipe
+duress
+disguise
+cover story
+hidden
+secret vault
+
+# --- Spanish (es) ---
+abuso
+violencia
+maltrato
+víctima
+victima
+refugio
+denuncia
+ayuda
+
+# --- Greek (el) ---
+κακοποίηση
+βία
+θύμα
+καταφύγιο
+
+# NOTE: extend per locale BEFORE shipping that locale. A term missing here is a
+# term that can ship. When in doubt, add it.

@@ -1,0 +1,13 @@
+# The gate config is protected: widening it must be a reviewed human decision.
+# "If an agent can edit the allowlist to make its own build pass, the gate does
+#  nothing." (v1.5 Part II / THE_GATES.md G2)
+#
+# Replace @vsavytsk1 with the maintainer team once collaborators are added.
+
+/gates/                         @vsavytsk1
+/gates/allowed-deps.txt         @vsavytsk1
+/gates/forbidden-lexicon.txt    @vsavytsk1
+/gates/reserved-identity-patterns.txt   @vsavytsk1
+/.github/                       @vsavytsk1
+/gradle.properties              @vsavytsk1
+/CODEOWNERS                     @vsavytsk1

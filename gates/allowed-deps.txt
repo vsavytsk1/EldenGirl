@@ -1,0 +1,33 @@
+# ─────────────────────────────────────────────────────────────────────────
+# G2 · THE DEPENDENCY ALLOWLIST — transitive, no version wildcards.
+# Traces to: S8, "no third-party SDKs".
+#
+# One Maven coordinate per line: group:artifact:version
+# Anything the release classpath resolves that is NOT listed here FAILS the build,
+# including anything pulled in transitively.
+#
+# Adding a line is a HUMAN decision that needs a reason in the commit message.
+# That friction is the point. Every entry is a data-exfiltration surface and a
+# supply-chain risk that a person chose to accept. If an agent can widen this file
+# to make its own build pass, the gate does nothing — this file is CODEOWNERS-protected.
+#
+# The target is a build with NOTHING here but the first-party platform runtime the
+# OS already ships. AndroidX and Kotlin stdlib are part of the platform toolchain,
+# not third-party SDKs, and are enumerated explicitly (never wildcarded) as they are
+# actually resolved. Pin exact versions when the android/ module gains a build.
+# ─────────────────────────────────────────────────────────────────────────
+
+# --- Kotlin standard library (compiler-bundled runtime) ---
+# org.jetbrains.kotlin:kotlin-stdlib:<pinned>
+
+# --- AndroidX (platform Jetpack; enumerate exactly what release resolves) ---
+# androidx.core:core-ktx:<pinned>
+# androidx.activity:activity-compose:<pinned>
+# androidx.compose.ui:ui:<pinned>
+# androidx.compose.foundation:foundation:<pinned>
+
+# --- Encrypted store (the ONE justified native dependency for the record tier) ---
+# net.zetetic:sqlcipher-android:<pinned>   # reason: S4 encrypted-at-rest store; audited; no network
+
+# NOTE: nothing is uncommented until the android/ module has a real, pinned build.
+# An empty effective allowlist is the correct default.
