@@ -24,11 +24,13 @@
 # SCOPING NOTE (important and deliberate):
 #   G3 (forbidden lexicon) and G11 (cover identity) scan the DISGUISED tiers and
 #   build config — android/, ios/, and gradle/build files. They do NOT scan:
-#     - docs/   : the concept site + human-authored threat-model spec, which discusses
-#                 the subject by necessity and is meant to be published (Part VII), and
-#                 is the GitHub Pages site. PUBLIC by design — exempt from lexicon/identity,
-#                 but STILL bound by G4 zero-write, which DOES scan its html/js.
-#     - gates/  : these files literally define the forbidden terms and identity shapes.
+#     - docs/     : the concept site + human-authored threat-model spec, which discusses
+#                   the subject by necessity and is meant to be published (Part VII), and
+#                   is the GitHub Pages site. PUBLIC by design — exempt from lexicon/identity,
+#                   but STILL bound by G4 zero-write, which DOES scan its html/js.
+#     - grimoire/ : published reference prose — the source docs and MONSTER_MANUAL.md that
+#                   name the tactics and describe the build openly. Meant to be read.
+#     - gates/    : these files literally define the forbidden terms and identity shapes.
 #   The gate's job is to keep the subject and the chosen cover out of the DISGUISED
 #   artefacts, not to censor the published specification.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -508,9 +510,10 @@ def g11_cover_identity(artefact: Path | None) -> Result:
     identity_file = GATES / "reserved-identity-patterns.txt"
     for p in _tracked_files():
         # Never scan the pattern-definition file itself, the docs (the published
-        # spec), or the web codex (public by design). See SCOPING NOTE at top.
+        # spec + concept site), the grimoire (published reference prose that discusses
+        # the subject and the build openly), or the gate config. See SCOPING NOTE.
         rel_parts = set(p.relative_to(REPO).parts)
-        if p == identity_file or (rel_parts & {"docs", "web", "gates"}):
+        if p == identity_file or (rel_parts & {"docs", "grimoire", "gates"}):
             continue
         if p.suffix.lower() not in (SOURCE_EXTS | {".md", ".json", ".yml", ".yaml", ".txt", ".cfg"}):
             continue
